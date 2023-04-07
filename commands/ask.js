@@ -1,5 +1,5 @@
-import { Configuration, OpenAIApi } from 'openai';
-const { SlashCommandBuilder } =   require('discord.js');
+const { Configuration, OpenAIApi } = require('openai')
+const { SlashCommandBuilder } = require('discord.js');
 const fs = require('node:fs');
 const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
@@ -14,7 +14,7 @@ module.exports = {
   .setDescription('Ask EMMA Bot for help with FPS Core, powered by GPT4!')
   .addStringOption(option =>
     option
-      .setName('Question')
+      .setName('question')
       .setDescription("The question you'd like to ask EMMA Bot")
       .setRequired(true)),
   async execute(interaction) {
