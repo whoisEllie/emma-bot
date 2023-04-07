@@ -10,10 +10,13 @@
   },
   "author": "Brian Buchanan",
   "license": "ISC",
-  "dependencies": {
-    "discord.js": "discordjs/discord.js#master"
-  },
   "devDependencies": {
     "nodemon": "^1.19.2"
+  },
+  "dependencies": {
+    "discord.js": "^14.6.0",
+    "discordjs-reaction-role": "^3.1.0",
+    "openai": "^3.2.1",
+    "trello-node-api": "^0.0.9"
   }
 }

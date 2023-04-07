@@ -4,8 +4,6 @@ const { Client, Partials, GatewayIntentBits, Collection, Events } = require('dis
 const { ReactionRole } = require("discordjs-reaction-role");
 
 // the config file contains two fields:
-//   channel - name of the roles channel
-//   roles   - mapping between reaction and role
 const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 // the client is created with the partial message option to capture events for uncached messages
