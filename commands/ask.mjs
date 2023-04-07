@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } =   require('discord.js');
 import { Configuration, OpenAIApi } from 'openai';
+const { SlashCommandBuilder } =   require('discord.js');
+const fs = require('node:fs');
 const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
-var fs = require('fs');
 require.extensions['.txt'] = function (module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');
 };

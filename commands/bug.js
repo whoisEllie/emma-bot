@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } =   require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const fs = require('node:fs');
 const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
