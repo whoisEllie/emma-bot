@@ -26,15 +26,26 @@ module.exports = {
 
     const openai = new OpenAIApi(configuration);
 
-    const completion = await openai.createChatCompletion({
-      model: "gpt-4",
-      max_tokens: 384,
-      messages: [
-        {role: "system", content: context},
-        {role: "user", content: interaction.options.getString('Question')}
-      ]
-    })
+    await interaction.deferReply({ ephemeral: true })
 
-    await interaction.reply(completion.data.choices[0].message);
-  },
+
+    try {
+      const completion = await openai.createChatCompletion({
+        model: "gpt-4",
+        max_tokens: 384,
+        messages: [
+          {role: "system", content: context},
+          {role: "user", content: interaction.options.getString('question')}
+        ]
+      })
+
+      interaction.editReply(completion.data.choices[0].message);
+  
+    } catch (error) {
+        console.log(error) 
+        interaction.editReply("Something went wrong")
+    }
+
+
+    },
 };
