@@ -19,6 +19,11 @@ module.exports = {
       .setRequired(true)),
   async execute(interaction) {
 
+    if (!(interaction.channel.id == 1094360228922933338 || interaction.channel.id == 1094362469436235777)) {
+      interaction.reply("Please use the /ask command in the <#1094360228922933338> channel only.")
+      return;
+    }
+
     const configuration = new Configuration({
       organization: config.OpenAIOrgID,
       apiKey: config.OpenAIKey
