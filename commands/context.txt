@@ -70,3 +70,50 @@ If you’re having trouble with the thickness of the surface you are trying to v
 
 Based on your game, you might encounter some issues with vaulting through small gaps, such as those shown below. FPS Core includes a guard-rail for situations like this, which checks the height of gaps in order to check that they’re large enough for the player to vault through. To adjust it, look for the Vault Space Height variable under the Vault settings in your character.
 
+For handling interactions, FPS Core provides InteractionActor and InteractedActor. These are designed as a very flexible framework to create interactions, and are scripted in Blueprint.
+
+To get started, we need to make sure that our player supports interaction with these components. This is handled with the built in actor component "Interaction". To add this, open up BP_FPSCharacter, and in the Components tab press the + key and add the Interaction Component
+
+Interaction might not appear to do anything at first, but this is the component that handles interacting with the aforementioned InteractionActor. It draws a line trace from the centre of the camera and triggers an input in hit actors that implement the interface. But you don’t need to understand any of that to make the most of the interaction system included with FPS Core.
+
+Now that our player implements the Interaction Component, we need to create something to interact with. To do this, we’re going to create a blueprint that derives from InteractionActor, let's call it BP_Button.
+
+Opening up BP_Button, you’ll notice that there is already a mesh created, and that we have an array of ‘Interacted Actors’. When a child of InteractionActor is interacted with, it will delegate that interaction call to any number of InteractedActors, allowing you to build complex logic.
+
+You can assign any valid mesh as your button, and then drag it into the scene!
+
+You’ll notice in the editor that there’s an editable array called Interacted Actors. This is the main way that you are able to interact with actors in FPS Core. There are two main ways that we can handle interactions in FPS Core.
+
+The first is with the Interacted Actors array that was described above. If you actually tried to select something to interact with, you’ll have found out that you… can’t. That’s because this only works with a special class of actor – any subclass of InteractedActor
+
+Let’s create an InteractedActor now.
+
+A good way to think about how this works is a lightbulb/switch, so let’s create a lightbulb here. I’m going to call this actor BP_InteractedLight.
+
+If you open BP_InteractedLight, you’ll notice that it looks very similar to a default Actor class. I’m going to add a simple point light to my actor, and then move over to the Event Graph. In the event graph, you’ll find the On Interacted function.
+
+This function is called every time an InteractionActor that references the current InteractedActor is interacted with.
+
+That might be a little confusing, so let’s put this into practice.
+
+Let’s start by disabling the visibility of our light. We can do this in the details panel for our point light component.
+
+The next step is to set up our logic. I’m going to use a flip-flop node in order to swap the visibility of the light each time it is interacted with. I can then hook that up to a Set Visibility node in order to dynamically adjust the visibility of the light.
+
+With that set up, we can now return to our level and add the light to our scene. Then, we just need to add the light to our Interacted Actors array in our button! Create an entry, and then you can either use the eyedropper tool to select it from the viewport or use the drop down to select it from the inspector. Neither of these will let you select actors that don’t derive from InteractedActor.
+
+If you’re struggling here, make sure that you’re trying to add entries from the details panel in the editor view with your button selected.
+
+If you run the game now, you should be able to look directly at the button from relatively close up, and use the ‘interact’ key (IA_Interact) that we set up earlier to interact with the button, and you should see the light turn on and off!
+
+You can naturally link up as many lights as you want, and not just lights but also any other actors that implement a wide variety of logic, as long as they derive from InteractedActor
+
+It is also possible to run logic inside of an InteractionActor, such as our button.
+
+These actors include two blueprint implementable functions – On Interaction and Interaction completed
+
+Interaction Completed is relatively self explanatory, as it is called after all the connected actors have been ‘interacted with’. If you wish to run logic on just an individual interaction actor (such as a button that plays a sound when it is pressed, for example), you can implement that logic in the Interaction Completed event. There’s no need to created Interacted Actors if you’re just planning to delegate to one output in the location/blueprint as your input.
+
+On Interaction is called for each actor that’s referenced in the Interacted Actors array after their interaction has been run. It also includes a reference to that actor, so that you can perform additional logic there if need be, such as deleting an actor that has run some required logic, updating variables within those actors, or performing bulk operations with data from the Interaction Actor.
+
+It's important to remember that this system is very flexible. As long as you use the base classes provided and interact using the given blueprint implementable functions - 'On Interaction' and 'Interaction Completed' in InteractionActor, and 'On Interacted' inside InteractedActor.
