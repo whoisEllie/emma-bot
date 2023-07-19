@@ -8,8 +8,6 @@ const {
   ComponentType,
 } = require("discord.js");
 const fs = require("node:fs");
-let responses = 0;
-const max_responses = 2;
 const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 var thread = null;
 
@@ -29,6 +27,9 @@ module.exports = {
         .setRequired(true),
     ),
   async execute(interaction) {
+    let responses = 0;
+    const max_responses = 2;
+
     if (
       !(
         interaction.channel.id == 1094360228922933338 ||
@@ -80,7 +81,6 @@ module.exports = {
       var res = completion.data.choices[0].message;
       conversation.push({ role: "system", content: res.content });
       conversation.push({ role: "user", content: "continue" });
-      console.log(completion);
 
       const channel = interaction.channel;
 
@@ -113,14 +113,13 @@ module.exports = {
         components: [row],
       });
     } catch (error) {
-      console.log(error);
       interaction.editReply("Something went wrong");
     }
 
     const collector = response.createMessageComponentCollector({
       componentType: ComponentType.Button,
       //TODO: figure out this timing
-      time: 10,
+      time: 3_600_000,
     });
 
     collector.on("collect", async (i) => {
@@ -148,7 +147,7 @@ module.exports = {
             "> thread! You have **" +
             (max_responses - responses) +
             "** generations remaining",
-          components: [responses == max_responses ? disabledRow : row],
+          components: [responses >= max_responses ? disabledRow : row],
         });
       } catch (error) {
         console.log(error);
