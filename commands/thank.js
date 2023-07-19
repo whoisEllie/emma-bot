@@ -27,6 +27,8 @@ module.exports = {
       return;
     }
 
+    await interaction.deferReply();
+
     await pb.admins.authWithPassword(pbUser, pbPass);
 
     let user;
@@ -53,21 +55,30 @@ module.exports = {
 
       await pb.collection("users").update(user.id, data);
 
+      var setRole = false;
+
       config.roles.forEach((role) => {
         if (
           data.karma >= role.cost &&
           !discordUser.roles.cache.has(role.roleid)
         ) {
           discordUser.roles.add(role.roleid);
-          interaction.reply(
-            `You thanked ${discordUser.user.username}! They are now a ${role.rolename}!`,
-          );
+          interaction.editReply({
+            content: `You thanked ${discordUser.user.username}! They are now a ${role.rolename}!`,
+          });
+          setRole = true;
         }
       });
 
-      interaction.reply(`You thanked ${discordUser.user.username}!`);
+      if (!setRole) {
+        interaction.editReply({
+          content: `You thanked ${discordUser.user.username}!`,
+        });
+      }
     } catch (error) {
-      interaction.reply("Something went wrong. Please try again later.");
+      interaction.editReply({
+        content: "Something went wrong. Please try again later.",
+      });
     }
 
     pb.authStore.clear();
