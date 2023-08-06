@@ -85,7 +85,10 @@ module.exports = {
       const channel = interaction.channel;
 
       thread = await channel.threads.create({
-        name: "RE: " + interaction.options.getString("question"),
+        name:
+          "RE: " +
+          interaction.options.getString("question").substring(0, 90) +
+          "...",
         autoArchiveDuration: 60,
         reason: "organization",
       });
