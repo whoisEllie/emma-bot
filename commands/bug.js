@@ -30,7 +30,7 @@ module.exports = {
         interaction.options.getString("description") ??
         "No description provided",
       pos: "top",
-      idList: "6330344db1f28f00d97253d0", //REQUIRED
+      idList: "641207dd28d38b6f38c92cce", //REQUIRED
     };
     await Trello.card
       .create(data)
